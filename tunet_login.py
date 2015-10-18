@@ -34,7 +34,7 @@ def getUserInfo():
 def main():
     # 检查是否已经在线
     if isOnline():
-        os.system('pause')
+        tryPause()
         return
 
     # 请求登陆
@@ -46,9 +46,9 @@ def main():
     if the_page == 'Login is successful.':
         pass
     elif the_page == 'IP has been online, please logout.':
-        os.system('pause')
+        tryPause()
     else:   # fail
-        os.system('pause')
+        tryPause()
 
 
 def requestLogin(username, passwordMd5):
@@ -69,7 +69,7 @@ def requestLogin(username, passwordMd5):
 
 
 def getUsername():
-    return input('user name:')
+    return input('user name:').strip()
 
 
 def getPassword():
@@ -90,9 +90,16 @@ def isOnline():
         return False
 
 
+def tryPause():
+    if os.name == 'nt':
+        os.system('pause')
+    elif os.name == 'posix':    # linux
+        pass
+
+
 if __name__ == '__main__':
     try:
         main()
     except Exception as ex:
         print('Error: %s' % ex)
-        os.system('pause')
+        tryPause()
