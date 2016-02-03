@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# File          : tunet_login.py
+# File          : tunet_login_daemon.py
 # Author        : bssthu
 # Project       : 
 # Description   : 参考 https://net.tsinghua.edu.cn/wired/login.js
@@ -10,6 +10,7 @@ import os
 import urllib
 import hashlib
 import getpass
+import time
 # try to support python2
 try:
     import urllib.request as rq
@@ -32,23 +33,16 @@ def get_user_info():
 
 
 def main():
-    # 检查是否已经在线
-    if is_online():
-        try_pause()
-        return
-
-    # 请求登陆
     (username, password_md5) = get_user_info()
-    the_page = request_login(username, password_md5)
 
-    # 结果
-    print(the_page)
-    if the_page == 'Login is successful.':
-        pass
-    elif the_page == 'IP has been online, please logout.':
-        try_pause()
-    else:   # fail
-        try_pause()
+    # 检查是否已经在线
+    while True:
+        if not is_online():
+            # 请求登陆
+            the_page = request_login(username, password_md5)
+            # 结果
+            print(the_page)
+        time.sleep(300)
 
 
 def request_login(username, password_md5):
@@ -83,11 +77,7 @@ def get_md5(text):
 
 
 def is_online():
-    if request_login('', '') == 'IP has been online, please logout.':
-        print('IP has been online, please logout.')
-        return True
-    else:
-        return False
+    return request_login('', '') == 'IP has been online, please logout.'
 
 
 def try_pause():
