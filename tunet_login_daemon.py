@@ -11,6 +11,7 @@ import urllib
 import hashlib
 import getpass
 import time
+import datetime
 # try to support python2
 try:
     import urllib.request as rq
@@ -42,9 +43,9 @@ def main():
                 # 请求登陆
                 the_page = request_login(username, password_md5)
                 # 结果
-                print(the_page)
+                print('%s: %s' % (datetime.datetime.now(), the_page))
         except Exception as ex:
-            print('Error: %s' % ex)
+            print('%s: Error: %s' % (datetime.datetime.now(), ex))
         time.sleep(300)
 
 
@@ -88,6 +89,10 @@ def try_pause():
         os.system('pause')
     elif os.name == 'posix':    # linux
         pass
+
+
+def get_time_string():
+    return datetime.datetime.now().strftime()
 
 
 if __name__ == '__main__':
