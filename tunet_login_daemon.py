@@ -37,11 +37,14 @@ def main():
 
     # 检查是否已经在线
     while True:
-        if not is_online():
-            # 请求登陆
-            the_page = request_login(username, password_md5)
-            # 结果
-            print(the_page)
+        try:
+            if not is_online():
+                # 请求登陆
+                the_page = request_login(username, password_md5)
+                # 结果
+                print(the_page)
+        except Exception as ex:
+            print('Error: %s' % ex)
         time.sleep(300)
 
 
